@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import * as glide from "@glideapps/tables";
+import ticketsApp from "./serviceNautom";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(ticketsApp); 
 
 const nominaTable = glide.table({
   token: "5e52f944-8d35-435e-b2a0-73c9281be943",
@@ -40,7 +42,7 @@ const nominaTable = glide.table({
   }
 });
 
-// GET todas las nóminas
+
 app.get("/nominas", async (req: Request, res: Response) => {
   try {
     const nominas = await nominaTable.get();
@@ -50,7 +52,7 @@ app.get("/nominas", async (req: Request, res: Response) => {
   }
 });
 
-// POST agregar nómina(s)
+
 app.post("/nominas", async (req: Request, res: Response) => {
   const data = Array.isArray(req.body) ? req.body : [req.body];
   const invalid = data.find(item => !(item.nombre || item.categoria));

@@ -73,74 +73,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
 var glide = __importStar(require("@glideapps/tables"));
 var app = (0, express_1.default)();
-app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-var nominaTable = glide.table({
+var ticketsTable = glide.table({
     token: "5e52f944-8d35-435e-b2a0-73c9281be943",
     app: "oWYpFv9Z629uWhWWRz9r",
-    table: "native-table-0tB7PkKhQJtr67hYfKnt",
+    table: "native-table-WegwJnzLERg10PS0V6hr",
     columns: {
-        area: { type: "string", name: "zQgxz" },
-        cargo: { type: "string", name: "ltlo2" },
-        legajo: { type: "number", name: "Legajo" },
-        apellido: { type: "string", name: "Apellido" },
-        nombre: { type: "string", name: "Nombre" },
-        dni: { type: "number", name: "Dni" },
-        fechaNac: { type: "date-time", name: "Fecha Nac" },
-        fechaIngreso: { type: "date-time", name: "Fecha Ingreso" },
-        categoria: { type: "string", name: "Categoria" },
-        sucursal: { type: "string", name: "Sucursal" },
-        cuil: { type: "number", name: "Cuil" },
-        region: { type: "string", name: "SECTOR" },
-        domicilio: { type: "string", name: "Domicilio" },
-        localidad: { type: "string", name: "Localidad" },
-        telefono: { type: "phone-number", name: "Telefono" },
-        mail: { type: "email-address", name: "Mail" },
-        estado: { type: "string", name: "Estado" },
-        categoriaCronos: { type: "string", name: "Categoria Cronos" },
-        rto: { type: "number", name: "Rto" },
-        banda: { type: "string", name: "Banda" },
-        sociedad: { type: "string", name: "Sociedad" },
-        horario: { type: "string", name: "Horario" },
-        tipoDeRegistro: { type: "string", name: "Tipo de registro" },
-        vtoRegistro: { type: "date-time", name: "Vto registro" },
-        personalDesasignadoRegional: { type: "string", name: "7ZW5r" },
-        created: { type: "date-time", name: "0IUFy" }
+        idCreador: { type: "string", name: "ID" },
+        novedad: { type: "string", name: "Novedad" },
+        fechaCreaciN: { type: "date-time", name: "Fecha de creación" },
+        idEmpleado: { type: "string", name: "Legajo creador" },
+        fechaInicio: { type: "date-time", name: "Fecha de inicio" },
+        fechaFin: { type: "date-time", name: "Fecha de fin" },
+        comentario: { type: "string", name: "Comentario" },
+        attachment: { type: "string", name: "Attachment" },
+        validaciN: { type: "boolean", name: "Validación" },
+        idValidador: { type: "string", name: "Validador" },
+        lastModified: { type: "date-time", name: "59m64" },
+        regiNAsignadaDesdeEjecuciN: { type: "string", name: "jOlLV" },
+        eliminar: { type: "boolean", name: "6B3Yp" },
+        source: { type: "string", name: "YktKM" },
+        idCronos: { type: "string", name: "yITBB" }
     }
 });
-app.get("/nominas", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var nominas, error_1;
+// Consultar todos los tickets
+app.get("/tickets", function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var tickets, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, nominaTable.get()];
+                return [4 /*yield*/, ticketsTable.get()];
             case 1:
-                nominas = _a.sent();
-                res.json(nominas);
+                tickets = _a.sent();
+                res.json(tickets);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                res.status(500).json({ error: "Error al obtener nóminas" });
+                res.status(500).json({ error: "Error al obtener tickets" });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
-app.post("/nominas", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, invalid, results, _i, data_1, item, row, result, error_2;
+// Agregar ticket(s)
+app.post("/tickets", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, results, _i, data_1, item, row, result, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 data = Array.isArray(req.body) ? req.body : [req.body];
-                invalid = data.find(function (item) { return !(item.nombre || item.categoria); });
-                if (invalid) {
-                    res.status(400).json({ error: "Falta el nombre o la categoría en uno o más objetos" });
-                    return [2 /*return*/];
-                }
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 6, , 7]);
@@ -151,34 +135,23 @@ app.post("/nominas", function (req, res) { return __awaiter(void 0, void 0, void
                 if (!(_i < data_1.length)) return [3 /*break*/, 5];
                 item = data_1[_i];
                 row = {
-                    area: item.area,
-                    cargo: item.cargo,
-                    legajo: item.legajo,
-                    apellido: item.apellido,
-                    nombre: item.nombre || item.categoria,
-                    dni: item.dni,
-                    fechaNac: item.fechaNac,
-                    fechaIngreso: item.fechaIngreso,
-                    categoria: item.categoria,
-                    sucursal: item.sucursal,
-                    cuil: item.cuil,
-                    region: item.region,
-                    domicilio: item.domicilio,
-                    localidad: item.localidad,
-                    telefono: item.telefono,
-                    mail: item.mail,
-                    estado: item.estado,
-                    categoriaCronos: item.categoriaCronos,
-                    rto: item.rto,
-                    banda: item.banda,
-                    sociedad: item.sociedad,
-                    horario: item.horario,
-                    tipoDeRegistro: item.tipoDeRegistro,
-                    vtoRegistro: item.vtoRegistro,
-                    personalDesasignadoRegional: item.personalDesasignadoRegional,
-                    created: item.created
+                    idCreador: item.idCreador,
+                    novedad: item.novedad,
+                    fechaCreaciN: item.fechaCreaciN,
+                    idEmpleado: item.idEmpleado,
+                    fechaInicio: item.fechaInicio,
+                    fechaFin: item.fechaFin,
+                    comentario: item.comentario,
+                    attachment: item.attachment,
+                    validaciN: item.validaciN,
+                    idValidador: item.idValidador,
+                    lastModified: item.lastModified,
+                    regiNAsignadaDesdeEjecuciN: item.regiNAsignadaDesdeEjecuciN,
+                    eliminar: item.eliminar,
+                    source: item.source,
+                    idCronos: item.idCronos
                 };
-                return [4 /*yield*/, nominaTable.add(row)];
+                return [4 /*yield*/, ticketsTable.add(row)];
             case 3:
                 result = _a.sent();
                 results.push(result);
@@ -191,13 +164,14 @@ app.post("/nominas", function (req, res) { return __awaiter(void 0, void 0, void
                 return [3 /*break*/, 7];
             case 6:
                 error_2 = _a.sent();
-                res.status(500).json({ error: "Error al agregar nómina" });
+                res.status(500).json({ error: "Error al agregar ticket" });
                 return [3 /*break*/, 7];
             case 7: return [2 /*return*/];
         }
     });
 }); });
-app.put("/nominas/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+// Editar ticket
+app.put("/tickets/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, updateFields, result, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -205,25 +179,50 @@ app.put("/nominas/:id", function (req, res) { return __awaiter(void 0, void 0, v
                 id = req.params.id;
                 updateFields = req.body;
                 if (!id) {
-                    res.status(400).json({ error: "Falta el id del registro" });
+                    res.status(400).json({ error: "Falta el id del ticket" });
                     return [2 /*return*/];
                 }
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, nominaTable.update(id, updateFields)];
+                return [4 /*yield*/, ticketsTable.update(id, updateFields)];
             case 2:
                 result = _a.sent();
                 res.json(result);
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                res.status(500).json({ error: "Error al actualizar nómina" });
+                res.status(500).json({ error: "Error al actualizar ticket" });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
-app.listen(3000, function () {
-    console.log("API REST disponible en http://localhost:3000");
-});
+// Eliminar ticket
+app.delete("/tickets/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                if (!id) {
+                    res.status(400).json({ error: "Falta el id del ticket" });
+                    return [2 /*return*/];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, ticketsTable.delete(id)];
+            case 2:
+                _a.sent();
+                res.json({ success: true });
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _a.sent();
+                res.status(500).json({ error: "Error al eliminar ticket" });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+exports.default = app;
